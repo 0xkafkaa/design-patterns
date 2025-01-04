@@ -56,6 +56,66 @@ class PayByPayPal implements payments{
     }
 }
 
+class PayByCreditCard implements payments{
+    InputStreamReader in = new InputStreamReader(System.in);
+    private final BufferedReader br = new BufferedReader(in);
+    CreditCard card;
+
+    public void collectPaymentDetails(){
+        try {
+            System.out.println("Enter the card number: ");
+            String cardNumber = br.readLine();
+            System.out.println("Enter the card expiration date 'mm/yy': ");
+            String expiryDate = br.readLine();
+            System.out.println("Enter the CVV code: ");
+            String cvvCode = br.readLine();
+            card = new CreditCard(cardNumber, expiryDate, cvvCode);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+    public boolean pay(int paymentAmount){
+        if(validCard()){
+            card.debitAmount(paymentAmount);
+            System.out.println("Payment made successfully of amount " + paymentAmount + "by Credit Card");
+            return true;
+        } else return false;
+    }
+
+    private boolean validCard(){
+        return card != null;
+    }
+}
+
+class CreditCard {
+    private int amount;
+    private String cardNumber;
+    private String expiryDate;
+    private String cvvCode;
+
+    CreditCard(String cardNumber, String expiryDate, String cvvCode){
+        this.amount = 1000;
+        this.cardNumber = cardNumber;
+        this.expiryDate = expiryDate;
+        this.cvvCode = cvvCode;
+    }
+
+    public int getAmount(){
+        return this.amount;
+    }
+
+    public void creditAmount(int amount){
+        this.amount += amount;
+    }
+
+    public void debitAmount(int amount){
+        this.amount -= amount;
+    }
+}
+
+
+
 class PaymentStrategy{
     public static void main(String[] args){
         System.out.println("hello world");
