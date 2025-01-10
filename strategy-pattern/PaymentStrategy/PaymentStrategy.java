@@ -3,12 +3,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
 // interface implementation
-interface payments{
+interface Payments{
     boolean pay(int paymentAmount);
     void collectPaymentDetails();
 }
 
-class PayByPayPal implements payments{
+class PayByPayPal implements Payments{
     private static final Map<String, String> DB = new HashMap<>();    
     InputStreamReader in = new InputStreamReader(System.in);
     private final BufferedReader br = new BufferedReader(in);
@@ -56,7 +56,7 @@ class PayByPayPal implements payments{
     }
 }
 
-class PayByCreditCard implements payments{
+class PayByCreditCard implements Payments{
     InputStreamReader in = new InputStreamReader(System.in);
     private final BufferedReader br = new BufferedReader(in);
     CreditCard card;
@@ -114,7 +114,31 @@ class CreditCard {
     }
 }
 
+public class Order {
+    private int totalCost = 0;
+    private boolean isClosed = false;
 
+    public void processOrder(Payments strategy) {
+        strategy.collectPaymentDetails();
+        
+    }
+
+    public void setTotalCost(int cost) {
+        this.totalCost += cost;
+    }
+
+    public int getTotalCost() {
+        return totalCost;
+    }
+
+    public boolean isClosed() {
+        return isClosed;
+    }
+
+    public void setClosed() {
+        isClosed = true;
+    }
+}
 
 class PaymentStrategy{
     public static void main(String[] args){
